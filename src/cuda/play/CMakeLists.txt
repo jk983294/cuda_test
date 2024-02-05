@@ -1,0 +1,10 @@
+file( GLOB APP_SOURCES "*.cu")
+foreach( sourcefile ${APP_SOURCES} )
+    string( REGEX REPLACE ".+/" "" executablename1 ${sourcefile} )
+    string( REPLACE ".cu" "" executablename ${executablename1} )
+
+    message ("source files: " ${sourcefile} " executable: " ${executablename})
+    add_executable( ${executablename} ${sourcefile} )
+    target_compile_options(${executablename} PRIVATE $<$<COMPILE_LANGUAGE:CUDA>: -Xcompiler -fopenmp>)
+    target_link_libraries( ${executablename} PRIVATE OpenMP::OpenMP_CXX )
+endforeach( sourcefile ${APP_SOURCES} )
